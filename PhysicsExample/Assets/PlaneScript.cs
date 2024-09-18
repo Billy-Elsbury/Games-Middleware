@@ -28,7 +28,6 @@ public class PlaneScript : MonoBehaviour
     void Start()
     {
         Normal = new Vector3(0, 1, 0.2f);
-
         point = transform.position;
     }
 

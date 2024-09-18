@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class ObjectManager : MonoBehaviour
 {
-    List<SpherePhysics> spheres;
-    List<PlaneScript> planes;
+    public List<SpherePhysics> spheres;
+    public List<PlaneScript> planes;
     
 
     // Start is called before the first frame update
@@ -19,7 +19,7 @@ public class ObjectManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < spheres.Count - 1; i++)
+        for (int i = 0; i < spheres.Count; i++)
         {
             SpherePhysics sphere = spheres[i];
             foreach (PlaneScript plane in planes)
@@ -30,12 +30,15 @@ public class ObjectManager : MonoBehaviour
                 }
             }
 
-            for (int j = i + 1; j < spheres.Count; j++)
+            if (i < (spheres.Count - 1))
             {
-               SpherePhysics sphere2 = spheres[j];
-                if (sphere2.isCollidingWith(sphere))
+                for (int j = i + 1; j < spheres.Count; j++)
                 {
-                    sphere.ResolveCollisionWith(sphere2);
+                    SpherePhysics sphere2 = spheres[j];
+                    if (sphere2.isCollidingWith(sphere))
+                    {
+                        sphere.ResolveCollisionWith(sphere2);
+                    }
                 }
             }
         }
