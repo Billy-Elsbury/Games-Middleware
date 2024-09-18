@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class SpherePhysics : MonoBehaviour
 {
-    Vector3 velocity, acceleration;
+    public Vector3 previousVelocity, previousPosition;
+    public Vector3 velocity, acceleration;
     public float mass = 1.0f;
     float gravity = 9.81f;
     float CoeficientOfRestitution = 0.8f;
@@ -22,12 +23,14 @@ public class SpherePhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        previousVelocity = velocity;
+        previousPosition = transform.position;
+
         acceleration = gravity * Vector3.down;
 
         velocity += acceleration * Time.deltaTime;
 
         transform.position += velocity * Time.deltaTime;
-
     }
 
     public void ResolveCollisionWith(PlaneScript planeScript)
@@ -49,6 +52,14 @@ public class SpherePhysics : MonoBehaviour
 
     public void ResolveCollisionWith(SpherePhysics sphere2)
     {
+        //calculate time of impact
+        float distance1 = Vector3.Distance(sphere2.transform.position, transform.position) - (sphere2.Radius + Radius);
+        float oldDistance = Vector3.Distance(sphere2.previousPosition, previousPosition) - (sphere2.Radius + Radius);
+
+        //calculate time at which distance was 0 d(f) = oldDistance + (distance - oldDistance) t/deltaTime
+        print("Distance:" + distance1 + "Old Distance: " + oldDistance);
+
+
         Vector3 normal = (transform.position - sphere2.transform.position).normalized;
 
         Vector3 sphere1Parallel = Utility.parallel(velocity, normal);
