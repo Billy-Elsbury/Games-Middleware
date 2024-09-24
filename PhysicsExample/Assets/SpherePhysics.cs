@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 public class SpherePhysics : MonoBehaviour
@@ -10,6 +12,8 @@ public class SpherePhysics : MonoBehaviour
     public float mass = 1.0f;
     float gravity = 9.81f;
     float CoeficientOfRestitution = 0.8f;
+    float timeOfImpact;
+    Vector3 positionOfImpact;
 
     Vector3 newVelocity1, newVelocity2; 
     
@@ -35,14 +39,43 @@ public class SpherePhysics : MonoBehaviour
 
     public void ResolveCollisionWith(PlaneScript planeScript)
     {
-        transform.position -= velocity * Time.deltaTime;
+        float currentDistance = planeScript.distanceFromSphere(this);
+        float previousDistance = Vector3.Dot(previousPosition - planeScript.Position, planeScript.Normal) - Radius;
 
-        Vector3 y = Utility.parallel(velocity, planeScript.Normal);
-        Vector3 x = Utility.perpendicular(velocity, planeScript.Normal);
+        //DEBUG
+        print("Distance:" + currentDistance + "Old Distance: " + previousDistance);
+
+        //At time d(0) = d0 -> d(t) = d0 + mt ... (where t = time)
+        //At time d(deltaTime) = d1 -> d(t) = d0 + (d1 - d0)(t/deltaTime)
+        //calculate time at which distance was 0 d(t) = oldDistance + (distance - oldDistance) t/deltaTime
+        // For what t is d(t) = 0
+        //Basically ...-> timeOfImpact = -d0/(d1-d0) * deltaTime
+
+        //Step 1)
+        //timeOfImpact = -d0 / (d1 - d0) * deltaTime
+        timeOfImpact = -previousDistance / (currentDistance - previousDistance) * Time.deltaTime;
+        print("TOI: " + timeOfImpact + "deltaTime: " + Time.deltaTime);
+
+        //Step 2)
+        //now we have new velocity that will, when multiplied by timeOfImpact and added to the old position, will give us
+        //the position when the sphere would have collided with the plane.
+        positionOfImpact = previousPosition += (timeOfImpact * velocity);
+
+        //recalculate Velocity from previous position but using timeOfImpact instead of deltaTime
+        Vector3 impactVelocity = previousVelocity + (acceleration * timeOfImpact);
+
+        //Step 3) Resolve Collision
+
+        
+        Vector3 impactPosition = previousPosition + timeOfImpact * velocity;
+
+        Vector3 y = Utility.parallel(impactVelocity, planeScript.Normal);
+        Vector3 x = Utility.perpendicular(impactVelocity, planeScript.Normal);
 
         Vector3 newVelocity = (x - CoeficientOfRestitution * y);
-
-        velocity = newVelocity;
+        //calculate velocity after remaining time from impact
+        velocity = newVelocity + acceleration * (Time.deltaTime - timeOfImpact);
+        transform.position += velocity * (Time.deltaTime - timeOfImpact);
     }
 
     public bool isCollidingWith(SpherePhysics otherSphere)
@@ -56,9 +89,7 @@ public class SpherePhysics : MonoBehaviour
         float distance1 = Vector3.Distance(sphere2.transform.position, transform.position) - (sphere2.Radius + Radius);
         float oldDistance = Vector3.Distance(sphere2.previousPosition, previousPosition) - (sphere2.Radius + Radius);
 
-        //calculate time at which distance was 0 d(f) = oldDistance + (distance - oldDistance) t/deltaTime
-        print("Distance:" + distance1 + "Old Distance: " + oldDistance);
-
+        //DEBUG print("Distance:" + distance1 + "Old Distance: " + oldDistance);
 
         Vector3 normal = (transform.position - sphere2.transform.position).normalized;
 
