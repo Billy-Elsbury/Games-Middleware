@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Utility
 {
-    public static Vector3 parallel(Vector3 v, Vector3 n) 
+    public static Vector3 ProjectVectorOntoNormal(Vector3 vector, Vector3 normal) 
     {
-        return Vector3.Dot(v, n) *n;
+        return Vector3.Dot(vector, normal) *normal;
     }
 
-    public static Vector3 perpendicular(Vector3 v, Vector3 n)
+    public static Vector3 ExtractComponentPerpendicularToNormal(Vector3 vector, Vector3 normal)
     {
-        return v - parallel(v, n);
+        return vector - ProjectVectorOntoNormal(vector, normal);
     }
 }
