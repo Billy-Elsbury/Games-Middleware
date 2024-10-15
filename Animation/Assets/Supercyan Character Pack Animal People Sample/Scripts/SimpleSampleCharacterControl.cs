@@ -215,5 +215,17 @@ namespace Supercyan.AnimalPeopleSample
                 m_rigidBody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
             }
         }
+
+        private void LateUpdate()
+        {
+            Transform headTransform = m_animator.GetBoneTransform(HumanBodyBones.Head);
+
+          
+            Vector3 newUp = (new Vector3(10, 0, 0) - headTransform.position).normalized;
+            Vector3 newRight = (Vector3.down - Vector3.Dot(Vector3.down, newUp) * newUp).normalized;
+            Vector3 newForward = -Vector3.Cross(newUp, newRight);
+
+            headTransform.rotation = Quaternion.LookRotation(newForward, newUp);
+        }
     }
 }
