@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Supercyan.AnimalPeopleSample
 {
     public class SimpleSampleCharacterControl : MonoBehaviour
     {
+        ObjectScript focusObject;
         private enum ControlMode
         {
             /// <summary>
@@ -23,6 +25,7 @@ namespace Supercyan.AnimalPeopleSample
 
         [SerializeField] private Animator m_animator = null;
         [SerializeField] private Rigidbody m_rigidBody = null;
+        [SerializeField] private Object cube = null;
 
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
 
@@ -44,14 +47,37 @@ namespace Supercyan.AnimalPeopleSample
         private bool m_isGrounded;
 
         private List<Collider> m_collisions = new List<Collider>();
+        List<ObjectScript> allCatchableItems;
+
 
         private void Awake()
         {
             if (!m_animator) { gameObject.GetComponent<Animator>(); }
             if (!m_rigidBody) { gameObject.GetComponent<Animator>(); }
+
+            allCatchableItems = FindObjectsOfType<ObjectScript>().ToList();
+
+          //  if (!cube) { ClosestObject(allCatchableItems); }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private ObjectScript ClosestObject()
+        {
+            ObjectScript closestObject = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (ObjectScript obj in allCatchableItems)
+            {
+                float distance = Vector3.Distance(transform.position, obj.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestObject = obj;
+                }
+            }
+            return closestObject;
+        }
+
+            private void OnCollisionEnter(Collision collision)
         {
             ContactPoint[] contactPoints = collision.contacts;
             for (int i = 0; i < contactPoints.Length; i++)
@@ -107,7 +133,8 @@ namespace Supercyan.AnimalPeopleSample
         }
 
         private void Update()
-        {
+        {  if (Input.GetKeyDown(KeyCode.P))
+                focusObject = ClosestObject();
             if (!m_jumpInput && Input.GetKey(KeyCode.Space))
             {
                 m_jumpInput = true;
@@ -218,10 +245,16 @@ namespace Supercyan.AnimalPeopleSample
 
         private void LateUpdate()
         {
-            Transform headTransform = m_animator.GetBoneTransform(HumanBodyBones.Head);
+           
+        if (focusObject)
+            TurnHeadTo(focusObject.transform);
 
-          
-            Vector3 newUp = (new Vector3(10, 0, 0) - headTransform.position).normalized;
+        }
+
+        private void TurnHeadTo(Transform targetTransform)
+        {
+            Transform headTransform = m_animator.GetBoneTransform(HumanBodyBones.Head);
+            Vector3 newUp = (targetTransform.position - headTransform.position).normalized;
             Vector3 newRight = (Vector3.down - Vector3.Dot(Vector3.down, newUp) * newUp).normalized;
             Vector3 newForward = -Vector3.Cross(newUp, newRight);
 
