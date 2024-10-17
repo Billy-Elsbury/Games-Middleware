@@ -6,7 +6,6 @@ namespace Supercyan.AnimalPeopleSample
 {
     public class SimpleSampleCharacterControl : MonoBehaviour
     {
-        ObjectScript focusObject;
         private enum ControlMode
         {
             /// <summary>
@@ -47,6 +46,9 @@ namespace Supercyan.AnimalPeopleSample
         private bool m_isGrounded;
 
         private List<Collider> m_collisions = new List<Collider>();
+
+        ObjectScript focusObject;
+
         List<ObjectScript> allCatchableItems;
 
 
@@ -56,8 +58,6 @@ namespace Supercyan.AnimalPeopleSample
             if (!m_rigidBody) { gameObject.GetComponent<Animator>(); }
 
             allCatchableItems = FindObjectsOfType<ObjectScript>().ToList();
-
-          //  if (!cube) { ClosestObject(allCatchableItems); }
         }
 
         private ObjectScript ClosestObject()
@@ -133,8 +133,10 @@ namespace Supercyan.AnimalPeopleSample
         }
 
         private void Update()
-        {  if (Input.GetKeyDown(KeyCode.P))
+        {   
+            if (Input.GetKeyDown(KeyCode.P))
                 focusObject = ClosestObject();
+
             if (!m_jumpInput && Input.GetKey(KeyCode.Space))
             {
                 m_jumpInput = true;
