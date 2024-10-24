@@ -6,6 +6,7 @@ namespace Supercyan.AnimalPeopleSample
 {
     public class SimpleSampleCharacterControl : MonoBehaviour
     {
+        public Transform rhg;
         private enum ControlMode
         {
             /// <summary>
@@ -24,7 +25,6 @@ namespace Supercyan.AnimalPeopleSample
 
         [SerializeField] private Animator m_animator = null;
         [SerializeField] private Rigidbody m_rigidBody = null;
-        [SerializeField] private Object cube = null;
 
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
 
@@ -132,16 +132,87 @@ namespace Supercyan.AnimalPeopleSample
             if (m_collisions.Count == 0) { m_isGrounded = false; }
         }
 
+        private bool isPickingUp = false;
+        private bool isHoldingObject = false;
+        private Vector3 ikTargetPosition;
+        private Quaternion ikTargetRotation;
+
+        private float maxReachDistance = 1.5f; 
+        private float reachSpeed = 3f; 
+
         private void Update()
-        {   
+        {
             if (Input.GetKeyDown(KeyCode.P))
+            {
                 focusObject = ClosestObject();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && focusObject != null && !isHoldingObject)
+            {
+                isPickingUp = true;
+                ikTargetPosition = m_animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+            }
 
             if (!m_jumpInput && Input.GetKey(KeyCode.Space))
             {
                 m_jumpInput = true;
             }
         }
+
+        private void OnAnimatorIK(int layerIndex)
+        {
+            if (isPickingUp && focusObject != null)
+            {
+                Transform handTransform = rhg;
+
+                Vector3 directionToObject = (focusObject.transform.position - transform.position).normalized;
+                float distanceToObject = Vector3.Distance(transform.position, focusObject.transform.position);
+
+                float clampedDistance = Mathf.Min(distanceToObject, maxReachDistance);
+
+                Vector3 targetPosition = transform.position + directionToObject * clampedDistance;
+
+                ikTargetPosition = Vector3.Lerp(ikTargetPosition, targetPosition, Time.deltaTime * reachSpeed);
+                ikTargetRotation = Quaternion.LookRotation(focusObject.transform.position - handTransform.position);
+
+                m_animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+                m_animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
+                m_animator.SetIKPosition(AvatarIKGoal.RightHand, ikTargetPosition);
+                m_animator.SetIKRotation(AvatarIKGoal.RightHand, ikTargetRotation);
+
+                float distanceToHand = Vector3.Distance(handTransform.position, focusObject.transform.position)-focusObject.transform.localScale.x;
+                if (distanceToHand <= 0.2f) 
+                {
+                    AttachObjectToHand(focusObject); 
+                    isPickingUp = false; 
+                }
+            }
+            else
+            {
+                m_animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
+                m_animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
+            }
+        }
+
+        private void AttachObjectToHand(ObjectScript obj)
+        {
+
+            obj.transform.SetParent(rhg);
+            obj.transform.localPosition = Vector3.zero; 
+            obj.transform.localRotation = Quaternion.identity;
+
+            Rigidbody objRigidbody = obj.GetComponent<Rigidbody>();
+            if (objRigidbody != null)
+            {
+                objRigidbody.isKinematic = true;
+            }
+
+            isHoldingObject = true; 
+            m_animator.SetTrigger("PickUp");
+        }
+
+
+
 
         private void FixedUpdate()
         {
