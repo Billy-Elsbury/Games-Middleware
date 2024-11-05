@@ -40,7 +40,7 @@ public class PlaneScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Normal = new Vector3(0, 1, 0.2f);
+        Normal = new Vector3(0, 1, 0);
         point = transform.position;
     }
 
