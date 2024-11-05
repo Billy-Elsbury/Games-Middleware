@@ -142,7 +142,7 @@ namespace Supercyan.AnimalPeopleSample
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 focusObject = ClosestObject();
             }
@@ -156,6 +156,11 @@ namespace Supercyan.AnimalPeopleSample
             if (!m_jumpInput && Input.GetKey(KeyCode.Space))
             {
                 m_jumpInput = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.T) && isHoldingObject)
+            {
+                ThrowObject();
             }
         }
 
@@ -172,6 +177,7 @@ namespace Supercyan.AnimalPeopleSample
 
                 Vector3 targetPosition = transform.position + directionToObject * clampedDistance;
 
+                // Lerp hand to target
                 ikTargetPosition = Vector3.Lerp(ikTargetPosition, targetPosition, Time.deltaTime * reachSpeed);
                 ikTargetRotation = Quaternion.LookRotation(focusObject.transform.position - handTransform.position);
 
@@ -179,26 +185,27 @@ namespace Supercyan.AnimalPeopleSample
                 m_animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
                 m_animator.SetIKPosition(AvatarIKGoal.RightHand, ikTargetPosition);
                 m_animator.SetIKRotation(AvatarIKGoal.RightHand, ikTargetRotation);
-
-                float distanceToHand = Vector3.Distance(handTransform.position, focusObject.transform.position)-focusObject.transform.localScale.x;
-                if (distanceToHand <= 0.2f) 
+                
+                float distanceToHand = Vector3.Distance(handTransform.position, focusObject.transform.position) - focusObject.transform.localScale.x;
+                if (distanceToHand <= 0.3f)
                 {
-                    AttachObjectToHand(focusObject); 
-                    isPickingUp = false; 
+                    AttachObjectToHand(focusObject);
+                    isPickingUp = false;
                 }
             }
             else
             {
+                // Reset IK weights
                 m_animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
                 m_animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
             }
         }
 
+
         private void AttachObjectToHand(ObjectScript obj)
         {
-
             obj.transform.SetParent(rhg);
-            obj.transform.localPosition = Vector3.zero; 
+            obj.transform.localPosition = Vector3.zero;
             obj.transform.localRotation = Quaternion.identity;
 
             Rigidbody objRigidbody = obj.GetComponent<Rigidbody>();
@@ -207,11 +214,47 @@ namespace Supercyan.AnimalPeopleSample
                 objRigidbody.isKinematic = true;
             }
 
-            isHoldingObject = true; 
-            m_animator.SetTrigger("PickUp");
+            Collider objCollider = obj.GetComponent<Collider>();
+            if (objCollider != null)
+            {
+                objCollider.enabled = false;
+            }
+
+            isHoldingObject = true;
+            //m_animator.SetTrigger("PickUp");
         }
 
 
+        private void ThrowObject()
+        {
+            if (isHoldingObject && focusObject != null)
+            {
+                focusObject.transform.SetParent(null);
+
+                Rigidbody objRigidbody = focusObject.GetComponent<Rigidbody>();
+                if (objRigidbody != null)
+                {
+                    objRigidbody.isKinematic = false;
+
+                    objRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+                    Vector3 throwDirection = transform.forward + Vector3.up * 0.6f;
+                    float throwForce = 10f;
+                    objRigidbody.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+                }
+
+                Collider objCollider = focusObject.GetComponent<Collider>();
+                if (objCollider != null)
+                {
+                    objCollider.enabled = true;
+                }
+
+                isHoldingObject = false;
+                focusObject = null;
+
+                m_animator.SetTrigger("Throw");
+            }
+        }
 
 
         private void FixedUpdate()

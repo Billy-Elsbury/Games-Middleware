@@ -122,6 +122,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &119077335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 119077337}
+  - component: {fileID: 119077336}
+  m_Layer: 0
+  m_Name: ObjectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &119077336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119077335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b97ad007da3f85b409aba17c22d6caaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spheres: []
+  planes: []
+--- !u!4 &119077337
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119077335}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.5764413, y: 2.784197, z: -1.8729353}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &427312422 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4372587343206045713, guid: 81bb9eea30387e442899949a80011e55, type: 3}
@@ -330,6 +376,7 @@ GameObject:
   - component: {fileID: 774868394}
   - component: {fileID: 774868393}
   - component: {fileID: 774868392}
+  - component: {fileID: 774868397}
   m_Layer: 0
   m_Name: Snowball (1)
   m_TagString: Untagged
@@ -356,7 +403,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 774868391}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c348bbcb4aca86e43bfd9fb4c3f4a8d3, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -435,6 +482,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &774868397
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774868391}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &813450631
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,7 +601,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3041c080ec3cebe4ab7c87f5b21960e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -657,13 +731,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.009015678, y: -0.9942208, z: 0.10693389, w: 0.0029995942}
-  m_LocalPosition: {x: 6.91, y: 2.29, z: 3.01}
+  m_LocalRotation: {x: -0.18877894, y: -0.04129474, z: 0.016673328, w: -0.9810093}
+  m_LocalPosition: {x: -0.11, y: 2.52, z: -2.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 12.273, y: -179.537, z: 1.089}
+  m_Father: {fileID: 2007635085}
+  m_LocalEulerAnglesHint: {x: 21.824, y: -355.383, z: -1.057}
 --- !u!1 &1307494533
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,6 +751,7 @@ GameObject:
   - component: {fileID: 1307494536}
   - component: {fileID: 1307494535}
   - component: {fileID: 1307494534}
+  - component: {fileID: 1307494539}
   m_Layer: 0
   m_Name: Snowball
   m_TagString: Untagged
@@ -703,7 +778,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1307494533}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c348bbcb4aca86e43bfd9fb4c3f4a8d3, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -776,12 +851,39 @@ Transform:
   m_GameObject: {fileID: 1307494533}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.65, y: 1.25, z: -0.39}
+  m_LocalPosition: {x: 9.65, y: 0.989, z: -0.39}
   m_LocalScale: {x: 0.099999994, y: 0.099999994, z: 0.099999994}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1307494539
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307494533}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &1696521702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -849,6 +951,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 81bb9eea30387e442899949a80011e55, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 963194228}
     - targetCorrespondingSourceObject: {fileID: -4372587343206045713, guid: 81bb9eea30387e442899949a80011e55, type: 3}
       insertIndex: -1
       addedObject: {fileID: 813450632}
@@ -962,8 +1067,8 @@ Transform:
   m_GameObject: {fileID: 1854838427}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.46, y: -0.78, z: -0.47}
-  m_LocalScale: {x: 1, y: 1.293, z: 1}
+  m_LocalPosition: {x: 3.822, y: 0.478, z: -0.585}
+  m_LocalScale: {x: 0.32555085, y: 1.359536, z: 0.33582664}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1081,6 +1186,11 @@ MonoBehaviour:
   m_animator: {fileID: 2007635082}
   m_rigidBody: {fileID: 2007635081}
   m_controlMode: 0
+--- !u!4 &2007635085 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 81bb9eea30387e442899949a80011e55, type: 3}
+  m_PrefabInstance: {fileID: 1696521702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2058818522
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,8 +1290,8 @@ Transform:
   m_GameObject: {fileID: 2058818522}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.97, y: -1.26, z: -0.26}
-  m_LocalScale: {x: 1, y: 2.0023, z: 1}
+  m_LocalPosition: {x: 9.645, y: 0.14, z: -0.406}
+  m_LocalScale: {x: 0.32118, y: 1.5360413, z: 0.32118}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1190,7 +1300,6 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 962175533}
   - {fileID: 1696521702}
@@ -1199,3 +1308,4 @@ SceneRoots:
   - {fileID: 1854838432}
   - {fileID: 1307494538}
   - {fileID: 774868396}
+  - {fileID: 119077337}
