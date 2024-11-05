@@ -142,7 +142,7 @@ namespace Supercyan.AnimalPeopleSample
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F) && !isHoldingObject)
             {
                 focusObject = ClosestObject();
             }
@@ -188,7 +188,7 @@ namespace Supercyan.AnimalPeopleSample
                 m_animator.SetIKRotation(AvatarIKGoal.RightHand, ikTargetRotation);
                 
                 float distanceToHand = Vector3.Distance(handTransform.position, focusObject.transform.position) - focusObject.transform.localScale.x;
-                if (distanceToHand <= 0.5f)
+                if (distanceToHand <= 0.4f)
                 {
                     AttachObjectToHand(focusObject);
                     isPickingUp = false;
@@ -222,6 +222,7 @@ namespace Supercyan.AnimalPeopleSample
             }
 
             isHoldingObject = true;
+            
         }
 
 
@@ -370,11 +371,8 @@ namespace Supercyan.AnimalPeopleSample
         private void TurnHeadTo(Transform targetTransform)
         {
             Transform headTransform = m_animator.GetBoneTransform(HumanBodyBones.Head);
-            Vector3 newUp = (targetTransform.position - headTransform.position).normalized;
-            Vector3 newRight = (Vector3.down - Vector3.Dot(Vector3.down, newUp) * newUp).normalized;
-            Vector3 newForward = -Vector3.Cross(newUp, newRight);
-
-            headTransform.rotation = Quaternion.LookRotation(newForward, newUp);
+            
+            headTransform.LookAt(targetTransform);
         }
     }
 }
